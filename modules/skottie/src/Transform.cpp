@@ -10,7 +10,6 @@
 #include "include/core/SkRefCnt.h"
 #include "include/core/SkScalar.h"
 #include "include/private/base/SkAssert.h"
-#include "include/private/base/SkTPin.h"
 #include "modules/skottie/src/SkottiePriv.h"
 #include "modules/sksg/include/SkSGTransform.h"
 #include "src/utils/SkJSON.h"
@@ -50,9 +49,7 @@ SkMatrix TransformAdapter2D::totalMatrix() const {
     auto skew_matrix = [](float sk, float sa) {
         if (!sk) return SkMatrix::I();
 
-        // AE control limit.
-        static constexpr float kMaxSkewAngle = 85;
-        sk = -SkDegreesToRadians(SkTPin(sk, -kMaxSkewAngle, kMaxSkewAngle));
+        sk = -SkDegreesToRadians(sk);
         sa =  SkDegreesToRadians(sa);
 
         // Similar to CSS/SVG SkewX [1] with an explicit rotation.
