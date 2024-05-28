@@ -80,23 +80,9 @@ npm:
 	mkdir -p ./npm_build/bin
 	cp ./CHANGELOG.md ./npm_build/
 
-	mkdir -p ./npm_build/bin/full
-	./compile.sh release
-	cp ../../out/canvaskit_wasm/canvaskit.js       ./npm_build/bin/full
-	cp ../../out/canvaskit_wasm/canvaskit.wasm     ./npm_build/bin/full
-
-	# These features are turned off to keep code size smaller for the
-	# general use case.
-	./compile.sh release no_skottie no_sksl_trace no_alias_font \
-		no_effects_deserialization no_encode_jpeg no_encode_webp legacy_draw_vertices \
-		no_embedded_font
+	./compile.sh release no_embedded_font no_woff2 no_skp_serialization
 	cp ../../out/canvaskit_wasm/canvaskit.js       ./npm_build/bin
 	cp ../../out/canvaskit_wasm/canvaskit.wasm     ./npm_build/bin
-
-	mkdir -p ./npm_build/bin/profiling
-	./compile.sh profiling
-	cp ../../out/canvaskit_wasm_profile/canvaskit.js       ./npm_build/bin/profiling
-	cp ../../out/canvaskit_wasm_profile/canvaskit.wasm     ./npm_build/bin/profiling
 
 gm_tests_debug:
 	./compile_gm.sh debug
