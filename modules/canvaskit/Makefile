@@ -80,7 +80,7 @@ npm:
 	mkdir -p ./npm_build/bin
 	cp ./CHANGELOG.md ./npm_build/
 
-	./compile.sh release no_font no_skp_serialization
+	./compile.sh release no_font no_skp_serialization no_encode_png no_encode_jpeg no_encode_webp
 	cp ../../out/canvaskit_wasm/canvaskit.js       ./npm_build/bin
 	cp ../../out/canvaskit_wasm/canvaskit.wasm     ./npm_build/bin
 
