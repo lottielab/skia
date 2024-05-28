@@ -5,16 +5,12 @@
 (function(CanvasKit){
   CanvasKit._extraInitializations = CanvasKit._extraInitializations || [];
   CanvasKit._extraInitializations.push(function() {
-    // Takes in an html id or a canvas element
-    CanvasKit.MakeSWCanvasSurface = function(idOrElement) {
-      var canvas = idOrElement;
+    // Takes in a canvas element or offscreen canvas element
+    CanvasKit.MakeSWCanvasSurface = function(canvas) {
       var isHTMLCanvas = typeof HTMLCanvasElement !== 'undefined' && canvas instanceof HTMLCanvasElement;
       var isOffscreenCanvas = typeof OffscreenCanvas !== 'undefined' && canvas instanceof OffscreenCanvas;
       if (!isHTMLCanvas && !isOffscreenCanvas) {
-        canvas = document.getElementById(idOrElement);
-        if (!canvas) {
-          throw 'Canvas with id ' + idOrElement + ' was not found';
-        }
+        throw 'Parameter must be either of type HTMLCanvasElement or OffscreenCanvas';
       }
       // Maybe better to use clientWidth/height.  See:
       // https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
@@ -24,11 +20,6 @@
       }
       return surface;
     };
-
-    // Don't over-write the MakeCanvasSurface set by gpu.js if it exists.
-    if (!CanvasKit.MakeCanvasSurface) {
-      CanvasKit.MakeCanvasSurface = CanvasKit.MakeSWCanvasSurface;
-    }
 
     // Note that color spaces are currently not supported in CPU surfaces. due to the limitation
     // canvas.getContext('2d').putImageData imposes a limitation of using an RGBA_8888 color type.

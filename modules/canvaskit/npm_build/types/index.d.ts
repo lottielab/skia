@@ -5,11 +5,10 @@ export default function CanvasKitInit(opts?: CanvasKitInitOptions): Promise<Canv
 
 export interface CanvasKitInitOptions {
     /**
-     * This callback will be invoked when the CanvasKit loader needs to fetch a file (e.g.
-     * the blob of WASM code). The correct url prefix should be applied.
-     * @param file - the name of the file that is about to be loaded.
+     * @see https://emscripten.org/docs/api_reference/module.html#Module.instantiateWasm
      */
-    locateFile(file: string): string;
+    instantiateWasm(imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void):
+        WebAssembly.Exports | Record<never, never> | false;
 }
 
 export interface CanvasKit {
@@ -183,15 +182,6 @@ export interface CanvasKit {
 
     // Surface related functions
     /**
-     * Creates a Surface on a given canvas. If both GPU and CPU modes have been compiled in, this
-     * will first try to create a GPU surface and then fallback to a CPU one if that fails. If just
-     * the CPU mode has been compiled in, a CPU surface will be created.
-     * @param canvas - either the canvas element itself or a string with the DOM id of it.
-     * @deprecated - Use MakeSWCanvasSurface, MakeWebGLCanvasSurface, or MakeGPUCanvasSurface.
-     */
-    MakeCanvasSurface(canvas: HTMLCanvasElement | string): Surface | null;
-
-    /**
      * Creates a Raster (CPU) Surface that will draw into the provided Malloc'd buffer. This allows
      * clients to efficiently be able to read the current pixels w/o having to copy.
      * The length of pixels must be at least height * bytesPerRow bytes big.
@@ -206,18 +196,18 @@ export interface CanvasKit {
 
     /**
      * Creates a CPU backed (aka raster) surface.
-     * @param canvas - either the canvas element itself or a string with the DOM id of it.
+     * @param canvas - Canvas element or offscreen canvas to render on.
      */
-    MakeSWCanvasSurface(canvas: HTMLCanvasElement | string): Surface | null;
+    MakeSWCanvasSurface(canvas: HTMLCanvasElement | OffscreenCanvas): Surface | null;
 
     /**
      * A helper for creating a WebGL backed (aka GPU) surface and falling back to a CPU surface if
      * the GPU one cannot be created. This works for both WebGL 1 and WebGL 2.
-     * @param canvas - Either the canvas element itself or a string with the DOM id of it.
+     * @param canvas - Canvas element or offscreen canvas to render on.
      * @param colorSpace - One of the supported color spaces. Default is SRGB.
      * @param opts - Options that will get passed to the creation of the WebGL context.
      */
-    MakeWebGLCanvasSurface(canvas: HTMLCanvasElement | string, colorSpace?: ColorSpace,
+    MakeWebGLCanvasSurface(canvas: HTMLCanvasElement | OffscreenCanvas, colorSpace?: ColorSpace,
                            opts?: WebGLOptions): Surface | null;
 
     /**

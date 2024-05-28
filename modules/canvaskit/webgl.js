@@ -154,25 +154,17 @@
         return surface;
       }
 
-      // idOrElement can be of types:
-      //  - String - in which case it is interpreted as an id of a
-      //          canvas element.
-      //  - HTMLCanvasElement - in which the provided canvas element will
-      //          be used directly.
+      // canvas - either HTMLCanvasElement or OffscreenCanvas
       // colorSpace - sk_sp<ColorSpace> - one of the supported color spaces:
       //          CanvasKit.ColorSpace.SRGB
       //          CanvasKit.ColorSpace.DISPLAY_P3
       //          CanvasKit.ColorSpace.ADOBE_RGB
-      CanvasKit.MakeWebGLCanvasSurface = function(idOrElement, colorSpace, attrs) {
+      CanvasKit.MakeWebGLCanvasSurface = function(canvas, colorSpace, attrs) {
         colorSpace = colorSpace || null;
-        var canvas = idOrElement;
         var isHTMLCanvas = typeof HTMLCanvasElement !== 'undefined' && canvas instanceof HTMLCanvasElement;
         var isOffscreenCanvas = typeof OffscreenCanvas !== 'undefined' && canvas instanceof OffscreenCanvas;
         if (!isHTMLCanvas && !isOffscreenCanvas) {
-          canvas = document.getElementById(idOrElement);
-          if (!canvas) {
-            throw 'Canvas with id ' + idOrElement + ' was not found';
-          }
+          throw 'Parameter must be either of type HTMLCanvasElement or OffscreenCanvas';
         }
 
         var ctx = this.GetWebGLContext(canvas, attrs);
