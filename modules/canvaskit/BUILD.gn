@@ -234,10 +234,12 @@ skia_wasm_lib("canvaskit") {
     ]
   }
 
-  ldflags += [
-    "--pre-js",
-    rebase_path("paragraph.js"),
-  ]
+  if (skia_canvaskit_enable_paragraph) {
+    ldflags += [
+      "--pre-js",
+      rebase_path("paragraph.js"),
+    ]
+  }
 
   if (skia_enable_skottie) {
     ldflags += [

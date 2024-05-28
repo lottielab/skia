@@ -189,12 +189,15 @@ public:
     }
 
     sk_sp<SkTypeface> loadTypeface(const char name[], const char[] /* url */) const override {
-        sk_sp<SkData> faceData = this->findAsset(name);
-        if (!faceData) {
-            return nullptr;
-        }
-        auto stream = std::make_unique<SkMemoryStream>(faceData);
-        return SkTypeface_FreeType::MakeFromStream(std::move(stream), SkFontArguments());
+        // sk_sp<SkData> faceData = this->findAsset(name);
+        // if (!faceData) {
+        //     return nullptr;
+        // }
+        // auto stream = std::make_unique<SkMemoryStream>(faceData);
+        // return SkTypeface_FreeType::MakeFromStream(std::move(stream), SkFontArguments());
+
+        // The above was removed to build Canvaskit with Skottie but without fonts
+        return nullptr;
     }
 
     sk_sp<SkData> load(const char[]/*path*/, const char name[]) const override {
