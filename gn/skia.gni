@@ -101,6 +101,10 @@ declare_args() {
   }
 
   skia_build_rust_targets = false
+
+  if (is_wasm) {
+    skia_use_wasm_simd = true
+  }
 }
 
 declare_args() {

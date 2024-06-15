@@ -80,9 +80,12 @@ npm:
 	mkdir -p ./npm_build/bin
 	cp ./CHANGELOG.md ./npm_build/
 
-	./compile.sh release no_font no_skp_serialization no_encode_png no_encode_jpeg no_encode_webp
+	./compile.sh release cpu no_font no_skp_serialization no_encode_png no_encode_jpeg no_encode_webp
 	cp ../../out/canvaskit_wasm/canvaskit.js       ./npm_build/bin
 	cp ../../out/canvaskit_wasm/canvaskit.wasm     ./npm_build/bin
+
+	./compile.sh release cpu no_simd no_font no_skp_serialization no_encode_png no_encode_jpeg no_encode_webp
+	cp ../../out/canvaskit_wasm/canvaskit.wasm     ./npm_build/bin/canvaskit.simdless.wasm
 
 gm_tests_debug:
 	./compile_gm.sh debug

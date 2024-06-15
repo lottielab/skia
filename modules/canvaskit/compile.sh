@@ -21,6 +21,12 @@ if [[ $@ != *force_tracing* ]] ; then
   FORCE_TRACING="true"
 fi
 
+ENABLE_SIMD="true"
+if [[ $@ == *no_simd* ]]; then
+  echo "Disabling SIMD"
+  ENABLE_SIMD="false"
+fi
+
 if [[ $@ == *debug_build* ]]; then
   echo "Building a Debug build"
   IS_DEBUG="true"
@@ -205,6 +211,7 @@ echo "Compiling"
   werror=true \
   target_cpu=\"wasm\" \
   \
+  skia_use_wasm_simd=${ENABLE_SIMD} \
   skia_use_angle=false \
   skia_use_dng_sdk=false \
   skia_use_dawn=${ENABLE_WEBGPU} \
@@ -219,6 +226,7 @@ echo "Compiling"
   skia_use_no_jpeg_encode=${NO_ENCODE_JPEG} \
   skia_use_libpng_decode=${DO_DECODE} \
   skia_use_libpng_encode=${ENCODE_PNG} \
+  skia_use_libpng_simd=${ENABLE_SIMD} \
   skia_use_no_png_encode=${NO_ENCODE_PNG} \
   skia_use_libwebp_decode=${DO_DECODE} \
   skia_use_libwebp_encode=${ENCODE_WEBP} \

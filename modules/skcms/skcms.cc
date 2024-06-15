@@ -19,7 +19,7 @@
 #elif defined(__SSE__)
     #include <immintrin.h>
 
-    #if defined(__clang__)
+    #if defined(__clang__) && !defined(__wasm_simd128__)
         // That #include <immintrin.h> is usually enough, but Clang's headers
         // "helpfully" skip including the whole kitchen sink when _MSC_VER is
         // defined, because lots of programs on Windows would include that and

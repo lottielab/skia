@@ -323,6 +323,10 @@ config("default") {
   if (is_wasm) {
     cflags += [ "--sysroot=$skia_emsdk_dir/upstream/emscripten/cache/sysroot" ]
     ldflags += [ "--sysroot=$skia_emsdk_dir/upstream/emscripten/cache/sysroot" ]
+
+    if (skia_use_wasm_simd) {
+      cflags += [ "-msimd128", "-mavx" ]
+    }
   }
 
   # sanitize only applies to the default toolchain (usually the target).
