@@ -424,7 +424,7 @@ export interface CanvasKit {
      * Note: this animation will not be able to display text or images.
      * @param json
      */
-    MakeAnimation(json: string): SkottieAnimation;
+    MakeAnimation(json: string | ArrayBuffer): SkottieAnimation;
 
     /**
      * Returns a managed Skottie animation built from the provided json string and assets.
@@ -436,7 +436,7 @@ export interface CanvasKit {
      * @param soundMap - an optional mapping of sound identifiers (strings) to AudioPlayers.
      *                   Only needed if the animation supports sound.
      */
-    MakeManagedAnimation(json: string, assets?: Record<string, ArrayBuffer>,
+    MakeManagedAnimation(json: string | ArrayBuffer, assets?: Record<string, ArrayBuffer>,
                          filterPrefix?: string, soundMap?: SoundMap): ManagedSkottieAnimation;
 
     // Constructors, i.e. things made with `new CanvasKit.Foo()`;
