@@ -22,7 +22,7 @@ CanvasKit.MakeManagedAnimation = function(json, assets, prop_filter_prefix, soun
     prop_filter_prefix = '';
   }
   if (!assets) {
-    return CanvasKit._MakeManagedAnimation(json, 0, nullptr, nullptr, nullptr, prop_filter_prefix,
+    return CanvasKit._MakeManagedAnimation(json.byteOffset, json.length, 0, nullptr, nullptr, nullptr, prop_filter_prefix,
                                            soundMap, logger);
   }
   var assetNamePtrs = [];
@@ -56,7 +56,7 @@ CanvasKit.MakeManagedAnimation = function(json, assets, prop_filter_prefix, soun
   var assetsPtr     = copy1dArray(assetDataPtrs, "HEAPU32");
   var assetSizesPtr = copy1dArray(assetSizes,    "HEAPU32");
 
-  var anim = CanvasKit._MakeManagedAnimation(json, assetKeys.length, namesPtr,
+  var anim = CanvasKit._MakeManagedAnimation(json.byteOffset, json.length, assetKeys.length, namesPtr,
                                              assetsPtr, assetSizesPtr, prop_filter_prefix,
                                              soundMap, logger);
 

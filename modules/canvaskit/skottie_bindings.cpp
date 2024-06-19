@@ -262,7 +262,7 @@ private:
 
 class ManagedAnimation final : public SkRefCnt {
 public:
-    static sk_sp<ManagedAnimation> Make(const std::string& json,
+    static sk_sp<ManagedAnimation> Make(std::unique_ptr<char> json, int json_length,
                                         sk_sp<skottie::ResourceProvider> rp,
                                         std::string prop_prefix,
                                         emscripten::val logger) {
@@ -279,7 +279,7 @@ public:
                .setPrecompInterceptor(std::move(pinterceptor))
                .setTextShapingFactory(SkShapers::BestAvailable())
                .setLogger(JSLogger::Make(std::move(logger)));
-        auto animation = builder.make(json.c_str(), json.size());
+        auto animation = builder.make(json.get(), json_length);
         auto slotManager = builder.getSlotManager();
 
         return animation
@@ -682,8 +682,8 @@ EMSCRIPTEN_BINDINGS(Skottie) {
             self.render(canvas, dst);
         }), allow_raw_pointers());
 
-    function("MakeAnimation", optional_override([](std::string json)->sk_sp<skottie::Animation> {
-        return skottie::Animation::Make(json.c_str(), json.length());
+    function("MakeAnimation", optional_override([](std::unique_ptr<char> json, int json_length)->sk_sp<skottie::Animation> {
+        return skottie::Animation::Make(json.get(), json_length);
     }));
     constant("skottie", true);
 
@@ -757,7 +757,7 @@ EMSCRIPTEN_BINDINGS(Skottie) {
         .function("_setTextSlot"     , &ManagedAnimation::setTextSlot)
         .function("setImageSlot"     , &ManagedAnimation::setImageSlot);
 
-    function("_MakeManagedAnimation", optional_override([](std::string json,
+    function("_MakeManagedAnimation", optional_override([](std::unique_ptr<char> json, int json_length,
                                                            size_t assetCount,
                                                            WASMPointerU32 nptr,
                                                            WASMPointerU32 dptr,
@@ -802,7 +802,7 @@ EMSCRIPTEN_BINDINGS(Skottie) {
         fontmgr = SkFontMgr_New_Custom_Empty();
 #endif
 
-        return ManagedAnimation::Make(json,
+        return ManagedAnimation::Make(std::move(json), json_length,
                                       skresources::DataURIResourceProviderProxy::Make(
                                           SkottieAssetProvider::Make(std::move(assets),
                                                                      std::move(soundMap)),
